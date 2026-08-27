@@ -16,10 +16,11 @@ def get_api_key():
     return None
 
 
-client = Anthropic(api_key=get_api_key())
+
 
 
 def generate_investment_memo(property_data):
+    client = Anthropic(api_key=get_api_key())
     user_message = (
         "Here is the completed underwriting data for this deal. "
         "Write the investment memorandum based only on this information:\n\n"

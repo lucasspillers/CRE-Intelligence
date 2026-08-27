@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 from anthropic import Anthropic
 from prompts.om_prompt import OM_SYSTEM_PROMPT
 
+load_dotenv()
+
 
 def get_api_key():
     if "ANTHROPIC_API_KEY" in os.environ:
@@ -14,8 +16,6 @@ def get_api_key():
         return st.secrets["ANTHROPIC_API_KEY"]
     return None
 
-
-client = Anthropic(api_key=get_api_key())
 
 FALLBACK_NARRATIVE = {
     "executive_summary": "An executive summary could not be generated for this property. Please review the underwriting data manually.",
@@ -41,6 +41,8 @@ def extract_json_object(text):
 
 
 def generate_om_narrative(property_data):
+    client = Anthropic(api_key=get_api_key())
+
     user_message = (
         "Here is the completed underwriting data for this deal. "
         "Write the six OM sections based only on this information:\n\n"
@@ -69,3 +71,4 @@ def generate_om_narrative(property_data):
         if key not in parsed or not parsed[key]:
             parsed[key] = FALLBACK_NARRATIVE[key]
     return parsed
+
