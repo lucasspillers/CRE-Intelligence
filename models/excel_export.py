@@ -121,8 +121,11 @@ def build_excel_model(
     ws[f"B{summary_row + 4}"] = f"=B{summary_row + 2}-B{summary_row + 3}"
     ws[f"B{summary_row + 4}"].number_format = '$#,##0'
 
-    ws[f"A{summary_row + 5}"] = "Total Equity Value"
-    ws[f"B{summary_row + 5}"] = f"=B12+B{summary_row}+B{summary_row + 4}"
+    ws[f"A{summary_row + 5}"] = "Total Distributions to Equity"
+    # Net Sale Proceeds (summary_row + 4) is already the exit value minus the
+    # loan payoff, so it ALREADY returns the original equity in B12. Adding B12
+    # here would count the investor's down payment a second time.
+    ws[f"B{summary_row + 5}"] = f"=B{summary_row}+B{summary_row + 4}"
     ws[f"B{summary_row + 5}"].number_format = '$#,##0'
 
     ws[f"A{summary_row + 6}"] = "Equity Multiple"

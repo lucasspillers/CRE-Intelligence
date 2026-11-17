@@ -306,7 +306,10 @@ if st.session_state.get("model_generated"):
     projected_exit_noi = annual_noi * ((1 + (noi_growth_rate / 100)) ** hold_period)
     exit_value = projected_exit_noi / (exit_cap_rate / 100)
     net_sale_proceeds = exit_value - remaining_balance
-    total_equity_value = initial_equity + total_cash_flow_over_hold + net_sale_proceeds
+    # Net sale proceeds is already the sale price minus the loan payoff, so it
+    # ALREADY hands back the original equity. Adding initial_equity here would
+    # count the investor's own down payment a second time.
+    total_equity_value = total_cash_flow_over_hold + net_sale_proceeds
     equity_multiple = total_equity_value / initial_equity if initial_equity > 0 else 0
     purchase_cap_rate = annual_noi / purchase_price if purchase_price > 0 else 0
     cash_on_cash_return = total_cash_flow / initial_equity if initial_equity > 0 else 0
@@ -347,7 +350,7 @@ if st.session_state.get("model_generated"):
         st.divider()
         st.write(f"- Total cash flow over {hold_period} years: **${total_cash_flow_over_hold:,.0f}**")
         st.write(f"- Net sale proceeds after debt payoff: **${net_sale_proceeds:,.0f}**")
-        st.write(f"- Total equity value at exit: **${total_equity_value:,.0f}**")
+        st.write(f"- Total distributions to equity: **${total_equity_value:,.0f}**")
         st.write(f"- Annual Debt Service: **${annual_debt_service:,.0f}**")
         st.write(f"- Remaining Loan Balance at Exit: **${remaining_balance:,.0f}**")
 
@@ -467,7 +470,7 @@ if st.session_state.get("model_generated"):
                 "remaining_loan_balance_at_exit": round(remaining_balance, 0),
                 "total_cash_flow_over_hold": round(total_cash_flow_over_hold, 0),
                 "net_sale_proceeds": round(net_sale_proceeds, 0),
-                "total_equity_value_at_exit": round(total_equity_value, 0),
+                "total_distributions_to_equity": round(total_equity_value, 0),
             },
             "cash_flow_schedule": yearly_data,
             "supporting_documents": {

@@ -71,4 +71,3 @@ def generate_om_narrative(property_data):
         if key not in parsed or not parsed[key]:
             parsed[key] = FALLBACK_NARRATIVE[key]
     return parsed
-
